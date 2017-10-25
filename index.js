@@ -33,6 +33,11 @@ class BigCurrency extends BigNumber {
 
 const P = BigCurrency.prototype
 
+P.absoluteValue = P.abs = function() {
+  let val = op(BigNumber.prototype.abs, this)
+  return new BigCurrency(val, this.ccy)
+}
+
 P.plus = P.add = function(that) {
   let val = op(BigNumber.prototype.add, this, that)
   return new BigCurrency(val, this.ccy)
