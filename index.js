@@ -22,11 +22,6 @@ class BigCurrency extends BigNumber {
     validateCurrency(this.ccy)
   }
 
-  add(that) {
-    let val = op(BigNumber.prototype.add, this, that)
-    return new BigCurrency(val, this.ccy)
-  }
-
   toString() {
     let dp  = decimalDigits(this.ccy)
     let sym = symbol(this.ccy)
@@ -36,9 +31,33 @@ class BigCurrency extends BigNumber {
   }
 }
 
+const P = BigCurrency.prototype
+
+P.plus = P.add = function(that) {
+  let val = op(BigNumber.prototype.add, this, that)
+  return new BigCurrency(val, this.ccy)
+}
+
+P.minus = P.sub = function(that) {
+  let val = op(BigNumber.prototype.sub, this, that)
+  return new BigCurrency(val, this.ccy)
+}
+
+P.times = P.mul = function(that) {
+  assertNotBigCurrency(that)
+  let val = op(BigNumber.prototype.mul, this, that)
+  return new BigCurrency(val, this.ccy)
+}
+
+P.dividedBy = P.div = function(that) {
+  assertNotBigCurrency(that)
+  let val = op(BigNumber.prototype.div, this, that)
+  return new BigCurrency(val, this.ccy)
+}
+
 function op(fn, x, y) {
   if (y instanceof BigCurrency) {
-    checkCurrenciesMatch(x.ccy, y.ccy)
+    assertCurrenciesMatch(x.ccy, y.ccy)
   }
 
   let val = fn.call(x, y)
@@ -62,9 +81,15 @@ function validateCurrency(ccy) {
   }
 }
 
-function checkCurrenciesMatch(ccy1, ccy2) {
+function assertCurrenciesMatch(ccy1, ccy2) {
   if (ccy1 !== ccy2) {
     throw new Error(`Currency missmatch ${ccy1} - ${ccy2}`)
+  }
+}
+
+function assertNotBigCurrency(val) {
+  if (val instanceof BigCurrency) {
+    throw new Error('BigCurrency is not allowed for this operation. Use BigNumber, Number or String.')
   }
 }
 
