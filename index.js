@@ -38,9 +38,17 @@ P.absoluteValue = P.abs = function() {
   return new BigCurrency(val, this.ccy)
 }
 
-P.plus = P.add = function(that) {
-  let val = op(BigNumber.prototype.add, this, that)
+P.dividedBy = P.div = function(that) {
+  assertNotBigCurrency(that)
+  let val = op(BigNumber.prototype.div, this, that)
   return new BigCurrency(val, this.ccy)
+}
+
+P.equals = P.eq = function(that) {
+  if (!(that instanceof BigCurrency)) {
+    return false
+  }
+  return (this.ccy === that.ccy) && BigNumber.prototype.eq.call(this, that)
 }
 
 P.minus = P.sub = function(that) {
@@ -48,15 +56,14 @@ P.minus = P.sub = function(that) {
   return new BigCurrency(val, this.ccy)
 }
 
-P.times = P.mul = function(that) {
-  assertNotBigCurrency(that)
-  let val = op(BigNumber.prototype.mul, this, that)
+P.plus = P.add = function(that) {
+  let val = op(BigNumber.prototype.add, this, that)
   return new BigCurrency(val, this.ccy)
 }
 
-P.dividedBy = P.div = function(that) {
+P.times = P.mul = function(that) {
   assertNotBigCurrency(that)
-  let val = op(BigNumber.prototype.div, this, that)
+  let val = op(BigNumber.prototype.mul, this, that)
   return new BigCurrency(val, this.ccy)
 }
 
