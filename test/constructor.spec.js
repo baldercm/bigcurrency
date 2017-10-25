@@ -10,35 +10,35 @@ describe('new BigCurrency()', () => {
     let x = '1.01'
     let c = new BigCurrency(x, 'EUR')
     expect(c.ccy).to.equal('EUR')
-    expect(c).to.be.an.instanceof(BigNumber)
+    expect(String(c.big)).to.equal('1.01')
   })
 
   it('should work for "number" value', () => {
     let x = 1.01
     let c = new BigCurrency(x, 'EUR')
     expect(c.ccy).to.equal('EUR')
-    expect(c).to.be.an.instanceof(BigNumber)
+    expect(String(c.big)).to.equal('1.01')
   })
 
   it('should work for "BigNumber" value', () => {
     let x = new BigNumber(1.01)
     let c = new BigCurrency(x, 'EUR')
     expect(c.ccy).to.equal('EUR')
-    expect(c).to.be.an.instanceof(BigNumber)
+    expect(String(c.big)).to.equal('1.01')
   })
 
-  it('should work for "BigCurrency" value and copy currency', () => {
+  it('should work for "BigCurrency" value and no currency', () => {
     let x = new BigCurrency(1.01, 'EUR')
     let c = new BigCurrency(x)
     expect(c.ccy).to.equal('EUR')
-    expect(c).to.be.an.instanceof(BigNumber)
+    expect(String(c.big)).to.equal('1.01')
   })
 
-  it('should work for "BigCurrency" value and overwrite currency', () => {
+  it('should work for "BigCurrency" value and ignore currency', () => {
     let x = new BigCurrency(1.01, 'EUR')
     let c = new BigCurrency(x, 'USD')
-    expect(c.ccy).to.equal('USD')
-    expect(c).to.be.an.instanceof(BigNumber)
+    expect(c.ccy).to.equal('EUR')
+    expect(String(c.big)).to.equal('1.01')
   })
 
   it('should throw error on null value', () => {
